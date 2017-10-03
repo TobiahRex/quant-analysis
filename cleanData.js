@@ -1,20 +1,41 @@
 const fs = require('fs');
 const m = require('moment');
 
-const files = ['GBPJPY-1M-JAN-2001.js', 'GBPJPY-1M-FEB-2001.js', 'GBPJPY-1M-MAR-2001.js', 'GBPJPY-1M-APR-2001.js', 'GBPJPY-1M-MAY-2001.js', 'GBPJPY-1M-MAY-2001.js', 'GBPJPY-1M-JUN-2001.js', 'GBPJPY-6M-2001.js']
-fs.readFile('../Trading/rawData/GBPJPY_1M_JAN2001.js', 'utf8', (err, data) => {
-  const candle = generateCandle(data, 'GBPJPY,', '5m');
+const inputFiles = [
+  'GBPJPY-1M-JAN-2001',
+  'GBPJPY-1M-FEB-2001',
+  'GBPJPY-1M-MAR-2001',
+  'GBPJPY-1M-APR-2001',
+  'GBPJPY-1M-MAY-2001',
+  'GBPJPY-1M-JUN-2001',
+  'GBPJPY-JUL-DEC-2001',
+];
 
-  fs.writeFile(
-    '../Trading/parsedData/GBPJPY_1M_JAN2001_parsed.js',
-    (`const gpyJpy1m = ${JSON.stringify(candle)}`),
-    ((err, data) => {
-    if (err) throw Error(err);
-    console.log('Write Successful.');
-  }));
+const timeFrames = [
+  '5m',
+  '15m',
+  '30m',
+  '1h',
+  '4h',
+];
+
+inputFiles.forEach((file) => {
+  fs.readFile(`../Trading/rawData/${file}.js`, 'utf8', (err, data) => {
+    const candle = generateCandle(data, 'GBPJPY,', '10m');
+
+    let newFile = file.replace(/1M/g, '5M');
+
+    fs.writeFile(
+      `../Trading/parsedData/-parse.js`,
+      (`const gpyJpy1m = ${JSON.stringify(candle)}`),
+      ((err, data) => {
+        if (err) throw Error(err);
+        console.log('Write Successful.');
+      }));
+    });
 });
 
-const generateCandle = (data, ticker, tf) => {
+function generateCandle(data, ticker, tf) {
   switch (tf) {
     case '5m': return generateTFCandle(data, ticker, 5);
     case '10m': return generateTFCandle(data, ticker, 10);
@@ -25,7 +46,6 @@ const generateCandle = (data, ticker, tf) => {
     default: throw Error('Must specify a time frame.');
   }
 }
-
 function generateTFCandle(data, ticker, tf) {
   const dataArr = data.split(ticker);
   const results = [];
