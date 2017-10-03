@@ -2,15 +2,20 @@ const fs = require('fs');
 const m = require('moment');
 
 const inputFiles = [
-  'GBPJPY-1M-JAN-2001',
-  'GBPJPY-1M-FEB-2001',
-  'GBPJPY-1M-MAR-2001',
-  'GBPJPY-1M-APR-2001',
-  'GBPJPY-1M-MAY-2001',
-  'GBPJPY-1M-JUN-2001',
-  'GBPJPY-JUL-DEC-2001',
+  'GBPJPY-1M-2001-01',
+  'GBPJPY-1M-2001-02',
+  'GBPJPY-1M-2001-03',
+  'GBPJPY-1M-2001-04',
+  'GBPJPY-1M-2001-05',
+  'GBPJPY-1M-2001-06',
+  'GBPJPY-1M-2001-07',
+  'GBPJPY-1M-2001-08',
+  'GBPJPY-1M-2001-09',
+  'GBPJPY-1M-2001-10',
+  'GBPJPY-1M-2001-11',
+  'GBPJPY-1M-2001-12',
 ];
-
+``
 const timeFrames = [
   '5m',
   '15m',
@@ -21,12 +26,12 @@ const timeFrames = [
 
 inputFiles.forEach((file) => {
   fs.readFile(`../Trading/rawData/${file}.js`, 'utf8', (err, data) => {
-    const candle = generateCandle(data, 'GBPJPY,', '10m');
+    const candle = generateCandle(data, 'GBPJPY,', '5m');
 
     let newFile = file.replace(/1M/g, '5M');
 
     fs.writeFile(
-      `../Trading/parsedData/-parse.js`,
+      `../Trading/parsedData/${newFile}-parsed.js`,
       (`const gpyJpy1m = ${JSON.stringify(candle)}`),
       ((err, data) => {
         if (err) throw Error(err);
