@@ -17,27 +17,29 @@ const inputFiles = [
 ];
 ``
 const timeFrames = [
-  '5m',
-  '15m',
+  // '5m',
+  // '15m',
   '30m',
   '1h',
   '4h',
 ];
 
-inputFiles.forEach((file) => {
-  fs.readFile(`../Trading/rawData/${file}.js`, 'utf8', (err, data) => {
-    const candle = generateCandle(data, 'GBPJPY,', '5m');
+timeFrames.forEach((tf) => {
+  inputFiles.forEach((file, i) => {
+    fs.readFile(`../Trading/rawData/${file}.js`, 'utf8', (err, data) => {
+      const candle = generateCandle(data, 'GBPJPY,', tf);
 
-    let newFile = file.replace(/1M/g, '5M');
+      let newFile = file.replace(/1M/g, tf.toUpperCase());
 
-    fs.writeFile(
-      `../Trading/parsedData/${newFile}-parsed.js`,
-      (`const gpyJpy1m = ${JSON.stringify(candle)}`),
-      ((err, data) => {
-        if (err) throw Error(err);
-        console.log('Write Successful.');
-      }));
+      fs.writeFile(`../Trading/parsedData/${newFile}-parsed.js`,
+        `const gpyJpy1m = ${JSON.stringify(candle)}`,
+        (err, data) => {
+          if (err) throw Error(err);
+          console.log('Write Successful.');
+        }
+      );
     });
+  });
 });
 
 function generateCandle(data, ticker, tf) {
