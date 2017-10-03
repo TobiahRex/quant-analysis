@@ -90,13 +90,13 @@ function generateTFCandle(data, ticker, tf) {
 
     candleData.pips = Number(((candleData.high - candleData.low) * 100).toFixed(2));
 
-    console.log('candleData: ', candleData);
+    console.log('\n', candleData, '\n');
     results.push(candleData);
 
     iStart += tf;
     iFinish += tf;
     iCandle += 1;
-    candleSplice = dataArr.splice(iStart, iFinish)
+    candleSplice = dataArr.splice(0, tf)
   }
   return results;
 }
