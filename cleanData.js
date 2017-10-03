@@ -1,6 +1,7 @@
 const fs = require('fs');
 const m = require('moment');
 
+const files = ['GBPJPY-1M-JAN-2001.js', 'GBPJPY-1M-FEB-2001.js', 'GBPJPY-1M-MAR-2001.js', 'GBPJPY-1M-APR-2001.js', 'GBPJPY-1M-MAY-2001.js', 'GBPJPY-1M-MAY-2001.js', 'GBPJPY-1M-JUN-2001.js', 'GBPJPY-6M-2001.js']
 fs.readFile('../Trading/rawData/GBPJPY_1M_JAN2001.js', 'utf8', (err, data) => {
   const candle = generateCandle(data, 'GBPJPY,', '5m');
 
