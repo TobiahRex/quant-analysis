@@ -9,6 +9,7 @@ const bbPromise = require('bluebird');
 *
 * @return: na
 */
+
 function modularizeFiles(fileName) {
   let fileContent = '';
 
@@ -80,4 +81,21 @@ function modularizeFiles(fileName) {
   .catch(console.error);
 }
 
-modularizeFiles('../Trading/rawData/GBPJPY-1M-2002.js');
+[
+  '../Trading/rawData/GBPJPY-1M-2002.js',
+  '../Trading/rawData/GBPJPY-1M-2003.js',
+  '../Trading/rawData/GBPJPY-1M-2004.js',
+  '../Trading/rawData/GBPJPY-1M-2005.js',
+  '../Trading/rawData/GBPJPY-1M-2006.js',
+  '../Trading/rawData/GBPJPY-1M-2007.js',
+  '../Trading/rawData/GBPJPY-1M-2008.js',
+  '../Trading/rawData/GBPJPY-1M-2009.js',
+  '../Trading/rawData/GBPJPY-1M-2010.js',
+  '../Trading/rawData/GBPJPY-1M-2011.js',
+  '../Trading/rawData/GBPJPY-1M-2012.js',
+  '../Trading/rawData/GBPJPY-1M-2013.js',
+  '../Trading/rawData/GBPJPY-1M-2014.js',
+  '../Trading/rawData/GBPJPY-1M-2015.js',
+].forEach((file => {
+  modularizeFiles(file);
+}));
