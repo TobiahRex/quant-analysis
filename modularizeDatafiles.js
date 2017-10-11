@@ -10,19 +10,20 @@ const bbPromise = require('bluebird');
 * @return: na
 */
 function modularizeFiles(fileName) {
+  let fileContent = '';
+
   bbPromise
   .fromCallback(cb => fs.readFile(fileName, 'utf8', cb))
   .then((data) => {
+    fileContent = data;
     let cachedMonth = '00';
     let iStart = 0;
     let iFinish = 0;
-    // let modules = [];
 
-    const results = data
-    .split('GBPJPY,')
+    fileContent = data.split('GBPJPY,');
+
+    fileContent
     .reduce((acc, chunk, i, array) => {
-      // chunk = 20010102,230200,171.86,171.87,171.86,171.87,4
-
       // increments as each chunk shares a common month value.
       iFinish = i;
 
@@ -32,11 +33,8 @@ function modularizeFiles(fileName) {
         const month = date.slice(4, 6);
         const arrLength = array.length - 1;
 
-        const lastChunk = (i === arrLength);
-        const differentMonth = (month !== cachedMonth);
-
         // verify the currently cached month is different than the current month.
-        if (lastChunk) {
+        if (i === arrLength) {
           acc.push({
             iStart,
             iFinish: arrLength,
@@ -44,14 +42,14 @@ function modularizeFiles(fileName) {
           return acc;
         }
 
-        if (differentMonth) {
-          cachedMonth = month;
-
+        if (month !== cachedMonth) {
           if (cachedMonth === '00') {
+            cachedMonth = month;
             iStart = i;
             return acc;
           }
 
+          cachedMonth = month;
           const module = {
             iStart,
             iFinish,
@@ -65,12 +63,14 @@ function modularizeFiles(fileName) {
       }
       return acc;
     }, [])
-    .forEach((section, i) => {
-      console.log('section: ', section);
-      let fileName = `../Trading/moduleRawData/GBP-JPY-1M-2002-${i <= 9 ? 0 : 1}-${i + 1}.js`;
+    .forEach(({ iStart, iFinish }, i) => {
+      let fileName = `../Trading/moduleRawData/GBP-JPY-1M-2002-${i < 9 ? 0 : ''}${i + 1}.js`;
+
+      let chunk = fileContent.slice(iStart, iFinish);
+      let newContent = `const x = \`${chunk}\`;`;
 
       bbPromise
-      .fromCallback(cb => fs.writeFile(fileName, 'utf8', cb))
+      .fromCallback(cb => fs.writeFile(fileName, newContent, 'utf8', cb))
       .then((data) => {
         console.log(`Saved month "${i + 1}".`);
       })
