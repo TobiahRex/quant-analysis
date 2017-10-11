@@ -21,9 +21,10 @@ function modularizeFiles(fileName) {
     let iStart = 0;
     let iFinish = 0;
 
-    fileContent = data.split('GBPJPY,');
+    fileContent = data.replace(/GBPJPY/g, '<<<>>>').split('<<<');
+    const splitData = data.split('GBPJPY,');
 
-    fileContent
+    splitData
     .reduce((acc, chunk, i, array) => {
       // increments as each chunk shares a common month value.
       iFinish = i;
@@ -83,19 +84,19 @@ function modularizeFiles(fileName) {
 
 [
   '../Trading/rawData/GBPJPY-1M-2002.js',
-  '../Trading/rawData/GBPJPY-1M-2003.js',
-  '../Trading/rawData/GBPJPY-1M-2004.js',
-  '../Trading/rawData/GBPJPY-1M-2005.js',
-  '../Trading/rawData/GBPJPY-1M-2006.js',
-  '../Trading/rawData/GBPJPY-1M-2007.js',
-  '../Trading/rawData/GBPJPY-1M-2008.js',
-  '../Trading/rawData/GBPJPY-1M-2009.js',
-  '../Trading/rawData/GBPJPY-1M-2010.js',
-  '../Trading/rawData/GBPJPY-1M-2011.js',
-  '../Trading/rawData/GBPJPY-1M-2012.js',
-  '../Trading/rawData/GBPJPY-1M-2013.js',
-  '../Trading/rawData/GBPJPY-1M-2014.js',
-  '../Trading/rawData/GBPJPY-1M-2015.js',
+  // '../Trading/rawData/GBPJPY-1M-2003.js',
+  // '../Trading/rawData/GBPJPY-1M-2004.js',
+  // '../Trading/rawData/GBPJPY-1M-2005.js',
+  // '../Trading/rawData/GBPJPY-1M-2006.js',
+  // '../Trading/rawData/GBPJPY-1M-2007.js',
+  // '../Trading/rawData/GBPJPY-1M-2008.js',
+  // '../Trading/rawData/GBPJPY-1M-2009.js',
+  // '../Trading/rawData/GBPJPY-1M-2010.js',
+  // '../Trading/rawData/GBPJPY-1M-2011.js',
+  // '../Trading/rawData/GBPJPY-1M-2012.js',
+  // '../Trading/rawData/GBPJPY-1M-2013.js',
+  // '../Trading/rawData/GBPJPY-1M-2014.js',
+  // '../Trading/rawData/GBPJPY-1M-2015.js',
 ].forEach((file => {
   modularizeFiles(file);
 }));
