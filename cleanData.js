@@ -15,9 +15,9 @@ const inputFiles = [
   'GBPJPY-1M-2001-11',
   'GBPJPY-1M-2001-12',
 ];
-``
+
 const timeFrames = [
-  // '5m',
+  // '5m', 
   // '15m',
   '30m',
   '1h',
