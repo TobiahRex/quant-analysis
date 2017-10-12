@@ -10,18 +10,18 @@ const bbPromise = require('bluebird');
 * @return: na
 */
 
-function modularizeFiles(fileName) {
+function modularizeFiles(rawFile) {
   let fileContent = '';
 
   bbPromise
-  .fromCallback(cb => fs.readFile(fileName, 'utf8', cb))
+  .fromCallback(cb => fs.readFile(rawFile, 'utf8', cb))
   .then((data) => {
     fileContent = data;
     let cachedMonth = '00';
     let iStart = 0;
     let iFinish = 0;
 
-    fileContent = data.replace(/GBPJPY/g, '<<<>>>').split('<<<');
+    fileContent = data.replace(/GBPJPY/g, '<<<***').split('<<<');
     const splitData = data.split('GBPJPY,');
 
     splitData
@@ -66,7 +66,8 @@ function modularizeFiles(fileName) {
       return acc;
     }, [])
     .forEach(({ iStart, iFinish }, i) => {
-      let fileName = `../Trading/moduleRawData/GBP-JPY-1M-2002-${i < 9 ? 0 : ''}${i + 1}.js`;
+      let year = rawFile.match(/\d{4}/g)[0];
+      let fileName = `../Trading/moduleRawData/GBP-JPY-1M-${year}-${i < 9 ? 0 : ''}${i + 1}.js`;
 
       let chunk = fileContent.slice(iStart, iFinish);
       let newContent = `const x = \`${chunk}\`;`;
@@ -84,19 +85,19 @@ function modularizeFiles(fileName) {
 
 [
   '../Trading/rawData/GBPJPY-1M-2002.js',
-  // '../Trading/rawData/GBPJPY-1M-2003.js',
-  // '../Trading/rawData/GBPJPY-1M-2004.js',
-  // '../Trading/rawData/GBPJPY-1M-2005.js',
-  // '../Trading/rawData/GBPJPY-1M-2006.js',
-  // '../Trading/rawData/GBPJPY-1M-2007.js',
-  // '../Trading/rawData/GBPJPY-1M-2008.js',
-  // '../Trading/rawData/GBPJPY-1M-2009.js',
-  // '../Trading/rawData/GBPJPY-1M-2010.js',
-  // '../Trading/rawData/GBPJPY-1M-2011.js',
-  // '../Trading/rawData/GBPJPY-1M-2012.js',
-  // '../Trading/rawData/GBPJPY-1M-2013.js',
-  // '../Trading/rawData/GBPJPY-1M-2014.js',
-  // '../Trading/rawData/GBPJPY-1M-2015.js',
+  '../Trading/rawData/GBPJPY-1M-2003.js',
+  '../Trading/rawData/GBPJPY-1M-2004.js',
+  '../Trading/rawData/GBPJPY-1M-2005.js',
+  '../Trading/rawData/GBPJPY-1M-2006.js',
+  '../Trading/rawData/GBPJPY-1M-2007.js',
+  '../Trading/rawData/GBPJPY-1M-2008.js',
+  '../Trading/rawData/GBPJPY-1M-2009.js',
+  '../Trading/rawData/GBPJPY-1M-2010.js',
+  '../Trading/rawData/GBPJPY-1M-2011.js',
+  '../Trading/rawData/GBPJPY-1M-2012.js',
+  '../Trading/rawData/GBPJPY-1M-2013.js',
+  '../Trading/rawData/GBPJPY-1M-2014.js',
+  '../Trading/rawData/GBPJPY-1M-2015.js',
 ].forEach((file => {
   modularizeFiles(file);
 }));
